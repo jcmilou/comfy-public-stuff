@@ -1,0 +1,52 @@
+{
+  "openrouter_node": {
+    "version": "1.0.2",
+    "repository": "https://github.com/gabe-init/ComfyUI-Openrouter_node",
+    "source": "https://cdn.comfy.org/gabe-init/openrouter_node/1.0.2/node.zip",
+    "archive_sha256": "ab4944365c75587e3b2d26a350638a8dc1295d986bc27d799779a388924a10c5",
+    "files": {
+      "LICENSE": "19a7722eeda30b106824950148646f4376b54f1d15483571f53df8ff943ca48a",
+      "README.md": "da1ff5594be4d2892bf53e0723e83442ee33186d27ee72928f7e8ff04d3f4874",
+      "__init__.py": "4b849ec3227392be3b658430423e864585ea5ca54b0d6111bb5f17381e77f2a0",
+      "chat_manager.py": "fc7329754b2673341c9a9d846bec2b44c903a9a54cc1a32f37e94613e7f4770d",
+      "examples/chat_mode_example.json": "dc2d9c8160609d4e3d8cd4974eff315ddcbd488216194c609f4b5f18eeb0cd9d",
+      "manage_chats.py": "ce122b3ac7d0795f5251f16b563847086796dcf182c338f60c8a4b905ad8df80",
+      "nano_banana_example.jpeg": "f401a40b642f3ca12be037af422484a1459b67dedc40aed0835d8b8c707747d7",
+      "node.py": "b38481a9c0ac4e507751dde1241fe0824f70aef0e8542dd8ef1b4ec7aa1e3818",
+      "openrouter_node_example.png": "69b5e4180eac126371d7b3f1bbd80b6faca50f0fe24f01331c67d37ab283a4a5",
+      "pyproject.toml": "e3d4fb190444647c0ea56d52a932c7cce3884d286581e22770b79d21ae495934",
+      "requirements.txt": "23755ac5d66718ce0dc06d0f54be086f6bed6d569aa3c56da604d52d8d5fa74f",
+      "web/openrouter_dynamic_inputs.js": "adc7576dba93808d9bbca34022e462c78b05bbd4aa28dd47559d848737244120"
+    }
+  },
+  "derfuu_comfyui_moddednodes": {
+    "version": "1.0.1",
+    "repository": "https://github.com/Derfuu/Derfuu_ComfyUI_ModdedNodes",
+    "source": "https://cdn.comfy.org/derfuu/derfuu_comfyui_moddednodes/1.0.1/node.tar.gz",
+    "archive_sha256": "08314c8c9dced778c386ac1510c120e6e52a092b373d6fb5bf21bf6a4ef15579",
+    "files": {
+      "README.md": "dc045fa2d5687a07020a5c1222b4fdb46b97b0881cda4f5fbaea44e0fa6f8dbb",
+      "__init__.py": "d1e76f2d48d5b51ed3ddbe0749490f2a6d5ff87c09289020a7472ddd453af215",
+      "nodes_info_workflows/string_functions_info.json": "1d3e3bf2d0c06fcc8ee1fdd065b031ddd5015b899c61a17f192b5a6213e39032",
+      "pyproject.toml": "9962fe46b3c84fd321a0e9c2cdc4006f69cf9f9dcb27d63706e38039c7e83c83",
+      "pyscripts/Nodes/Custom/LogicNode.py": "9fb68509776d0547e98935afff0f076472fd23593470473cd486d4af68eeda95",
+      "pyscripts/Nodes/Custom/Types.py": "b4081f0f8b66ded86177ca8d1ef90faa662aed110de3583e90a1e48d08fe7244",
+      "pyscripts/Nodes/Debug/Debug.py": "fd717106296602377e38ca78e83c8b452c34975a2cb65b61fe8594a704d322f3",
+      "pyscripts/Nodes/Functions/Converters.py": "47c0a6a030dced1de0e99fa4036b6d2f97d9d883a5ab4cb4a534d91ca1e4067c",
+      "pyscripts/Nodes/Functions/GetSizes.py": "77502e216f9468b20fa7e2cce6532e40ce6a3f039f4080fd77fb7cedd20733e1",
+      "pyscripts/Nodes/Functions/Random.py": "f00c36bf86f0db90cf836a1430594039de5ba1b0b8c8314429133fc8e4ea9023",
+      "pyscripts/Nodes/Functions/Strings.py": "9cf5a6a12cb6b53d3c7abca34b2151252e3c04d4375636cdf7b110226d61b03d",
+      "pyscripts/Nodes/Math/SimpleMath.py": "f25ca55d7a1e1c5aa7df3b78455a19833bde4a0f2e47b8d687589fb6575857f8",
+      "pyscripts/Nodes/Math/Trigonometry.py": "169accb0e481ede2f7317503b58132ac7bd97ac5fecc7c22ca59957ef3823505",
+      "pyscripts/Nodes/Modded/Conditioning.py": "ef7a75700c057abf5394acba539a71bcec8aeeb8b3543bca7d5edbbab83adbcb",
+      "pyscripts/Nodes/Modded/Images.py": "e8d6f39951a106bfcf2860a8af08a21f2768f81864eac750fa62a4722e573e62",
+      "pyscripts/Nodes/Modded/Latents.py": "213b5b717f8fe15056ccad9393a678d4f2b612fc5f28b1dd98108de9b89d676c",
+      "pyscripts/components/colors.py": "526f3a9e01ff4c0dd6c17a1d2058feca167a989ee26a6a1f8ad8cc998f361ca8",
+      "pyscripts/components/fields.py": "eade393dd644db75c4490738ed52ad8ac9d9809621e1e06bc7f6dedfb98f0258",
+      "pyscripts/components/sizes.py": "cfb66f20e80839350a422fda39521282d2478092da34d053b4a8ba84a853df5b",
+      "pyscripts/components/tree.py": "169d3bee6e4387737fbb250625a4cd6e807414a86319255066b2014ba9e527bb",
+      "scripts/debugNode.js": "0e5fe1b98793f0d41ed2047d04d9748d7a6f2758ac94721368287dab93e4bfec",
+      "utility/mapping_replace.py": "b3b73ee211ab8ed4744f66a7cf34ca92822f22eacb5670b450a447d0eeb57b7d"
+    }
+  }
+}

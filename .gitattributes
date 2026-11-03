@@ -1,0 +1,5 @@
+runpod-minimax-extras.sh text eol=lf
+runpod-node-snapshots.json text eol=lf
+# Preserve the official snapshot bytes used by SHA256 verification.
+custom_nodes/openrouter_node/** -text
+custom_nodes/derfuu_comfyui_moddednodes/** -text
