@@ -10,9 +10,15 @@ Su runtime ejecuta `/workspace/additional_params.sh` antes de preparar modelos y
 nodos. El script amplía los JSON de configuración de esa sesión; el instalador
 del autor se encarga de descargar los modelos y clonar los nodos.
 
-**El ejemplo no añade nada todavía.** Sus dos listas están vacías y los ejemplos
-están comentados. Edite `EXTRA_MODELS` y `EXTRA_CUSTOM_NODES` con lo que quiera
-usar. No guarde tokens en este repositorio; configúrelos en RunPod.
+El script instala **ComfyUI-PromptHelper** completo, incluidos `web/extension.js`
+y `web/primitive-inputs.js`, necesarios para las entradas Primitive del subgrafo.
+Antes de desplegar, publique esos tres archivos bajo `custom_nodes/ComfyUI-PromptHelper/` en
+la rama `main` de este repositorio. No descarga el paquete desde el repo privado
+de workflows.
+
+Las listas de modelos y otros nodos siguen vacías y sus ejemplos están comentados.
+Edite `EXTRA_MODELS` y `EXTRA_CUSTOM_NODES` con lo que quiera usar. No guarde
+tokens en este repositorio; configúrelos en RunPod.
 
 ### Configurar el template clonado
 
@@ -21,12 +27,13 @@ usar. No guarde tokens en este repositorio; configúrelos en RunPod.
    en la rama `main` de este repositorio:
 
 ```bash
-bash -c 'mkdir -p /workspace && curl -fsSL https://raw.githubusercontent.com/jcmilou/comfyui-workflows/main/runpod-minimax-extras.sh -o /workspace/additional_params.sh && exec bash /start_script.sh'
+bash -c 'mkdir -p /workspace && curl -fsSL https://raw.githubusercontent.com/jcmilou/comfy-public-stuff/main/runpod-minimax-extras.sh -o /workspace/additional_params.sh && exec bash /start_script.sh'
 ```
 
 3. Guarde el template. No necesita construir una imagen Docker propia.
 4. Despliegue un pod y revise sus logs. Con las listas vacías debe aparecer
-   `[personal-extras] Example loaded; no extra models or nodes configured.`
+   `[personal-extras] Installed ComfyUI-PromptHelper (OpenRouter / Local).`, seguido
+   de `[personal-extras] No additional models or other custom nodes configured.`
 
 No ejecute además este archivo desde el comando de inicio: el runtime original
 lo ejecuta después de sincronizar su repositorio. El comando solo lo descarga y
@@ -48,6 +55,8 @@ ComfyUI. El arranque completo en RunPod queda pendiente de probar.
 Puede usar el disco del pod durante su temporada y eliminar el pod al terminar,
 tras descargar sus resultados. No necesita contratar un Network Volume para este
 mecanismo. Mientras conserve discos contratados, se sigue cobrando almacenamiento.
+
+Verificación local sin red ni instalación de paquetes: `python -B test_runpod_extras.py`.
 
 Fuentes de la integración:
 

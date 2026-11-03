@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # RunPod / Hearmeman MiniMax: extra models and custom nodes.
 # Run by the author's runtime as /workspace/additional_params.sh.
-# This only extends its configuration; the original installer does the work.
+# Install our helper, then extend the original model/custom-node configuration.
 set -euo pipefail
 
 python3 - <<'PY'
 import json
 import os
 from pathlib import Path
+from urllib.request import urlopen
 
 # Add actual entries here. The commented examples are NOT enabled.
 EXTRA_MODELS = {
@@ -23,8 +24,26 @@ EXTRA_CUSTOM_NODES = [
     # Optional pinned revision: "https://github.com/OWNER/ComfyUI-MyNode.git|COMMIT_SHA",
 ]
 
+# The helper includes its browser extension; installing only __init__.py would
+# omit the fix for Primitive inputs connected through subgraphs.
+HELPER_BASE = "https://raw.githubusercontent.com/jcmilou/comfy-public-stuff/main/custom_nodes/ComfyUI-PromptHelper/"
+helper_files = {}
+for relative in ("__init__.py", "web/extension.js", "web/primitive-inputs.js"):
+    with urlopen(HELPER_BASE + relative, timeout=60) as response:
+        helper_files[relative] = response.read()
+compile(helper_files["__init__.py"].decode("utf-8"), "ComfyUI-PromptHelper/__init__.py", "exec")
+# Fetch the complete package before replacing anything in the installed copy.
+node_dir = Path("/ComfyUI/custom_nodes/ComfyUI-PromptHelper")
+for relative, source in helper_files.items():
+    target = node_dir / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    pending = target.with_name(target.name + ".pending")
+    pending.write_bytes(source)
+    pending.replace(target)
+print("[personal-extras] Installed ComfyUI-PromptHelper (OpenRouter / Local).")
+
 if not EXTRA_MODELS and not EXTRA_CUSTOM_NODES:
-    print("[personal-extras] Example loaded; no extra models or nodes configured.")
+    print("[personal-extras] No additional models or other custom nodes configured.")
     raise SystemExit(0)
 
 # TEMPLATE_DIR is exported by the author's runtime before executing this hook.
