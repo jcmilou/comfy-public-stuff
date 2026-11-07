@@ -6,8 +6,10 @@ Workflows y preparación personal de ComfyUI en RunPod.
 
 `runpod-minimax-extras.sh` se integra con el template clonado de
 [Hearmeman24/comfyui-minimax](https://github.com/Hearmeman24/comfyui-minimax).
-Su runtime ejecuta `/workspace/additional_params.sh` antes de preparar modelos y
-nodos. El script instala nuestras copias de nodos y amplía los JSON de
+Cuando `/workspace` ya existe, su runtime ejecuta `/workspace/additional_params.sh`
+antes de preparar modelos y nodos. Sin esa carpeta, el bootstrap ejecuta los extras
+después de sincronizar los repositorios y antes de entrar al runtime original.
+El script instala nuestras copias de nodos y amplía los JSON de
 configuración de esa sesión; el instalador del autor descarga los modelos.
 
 El script instala **ComfyUI-PromptHelper** completo, incluidos `web/extension.js`
@@ -57,15 +59,15 @@ de terceros. No guarde tokens en este repositorio; configúrelos en RunPod.
 ### Configurar el template clonado
 
 1. Mantenga la imagen Docker, los puertos y las variables del template original.
-2. En **Container Start Command**, pegue esta línea una vez publicado el script
+2. En **Container Start Command**, pegue esta línea una vez publicados los scripts
    en la rama `main` de este repositorio:
 
 ```bash
-bash -c 'mkdir -p /workspace && curl -fsSL --retry 4 --retry-delay 5 --retry-all-errors https://raw.githubusercontent.com/jcmilou/comfy-public-stuff/main/runpod-minimax-extras.sh -o /workspace/additional_params.sh && exec bash /start_script.sh'
+bash -c 'curl -fsSL --retry 4 --retry-delay 5 --retry-all-errors https://raw.githubusercontent.com/jcmilou/comfy-public-stuff/main/runpod-start.sh -o /tmp/runpod-start.sh && exec bash /tmp/runpod-start.sh'
 ```
 
 3. Guarde el template. No necesita construir una imagen Docker propia.
-4. Publique también las dos carpetas de snapshots, el manifiesto y este `.sh`
+4. Publique `runpod-start.sh`, `runpod-minimax-extras.sh`, las dos carpetas de snapshots y el manifiesto
    en `main` antes de desplegar. Los hashes impiden instalar archivos incompletos
    o modificados por una conversión de fin de línea; `.gitattributes` conserva
    sus bytes originales.
@@ -74,9 +76,16 @@ bash -c 'mkdir -p /workspace && curl -fsSL --retry 4 --retry-delay 5 --retry-all
    `derfuu_comfyui_moddednodes 1.0.1`, y el registro de ocho modelos adicionales.
    Después, el descargador original debe procesarlos.
 
-No ejecute además este archivo desde el comando de inicio: el runtime original
-lo ejecuta después de sincronizar su repositorio. El comando solo lo descarga y
-entrega el control al arranque original. Si falla la descarga del script, el
+El bootstrap nunca crea `/workspace`. Si ya existe, publica el hook y entrega el
+control a `/start_script.sh` sin modificarlo. Si no existe, prepara una copia
+temporal de `/start_script.sh` en `/tmp`: conserva sus sincronizaciones e inserta
+la ejecución de los extras justo antes de su última llamada al runtime. Comprueba
+que esa llamada corresponde a MiniMax; si no reconoce el script, se detiene.
+No modifica el entrypoint original ni el runtime. Este decide las rutas como
+siempre: `/workspace/ComfyUI` cuando existe `/workspace`, o `/ComfyUI` cuando no.
+No ejecute además `runpod-minimax-extras.sh` desde otro comando de inicio.
+Si falla la descarga del bootstrap o del hook, o el hook llega vacío o con errores
+de sintaxis de Bash, el
 comando no inicia ComfyUI, para que el fallo quede visible.
 
 La descarga inicial del `.sh` permite hasta cinco intentos, con cinco segundos
@@ -97,13 +106,22 @@ Los reinicios no duplican las entradas. Se conservan las opciones del autor.
 Este ejemplo depende de la interfaz actual del runtime de Hearmeman:
 `TEMPLATE_DIR`, `template.json`, `src/models_registry.json` y el hook
 `/workspace/additional_params.sh`. No es un script universal para cualquier imagen
-ComfyUI. El arranque completo en RunPod queda pendiente de probar.
+ComfyUI. El arranque completo en RunPod queda pendiente de probar. En un pod que
+ya se inició con el comando antiguo, quitar `mkdir` no elimina la carpeta creada
+ni recupera generaciones. Para comparar el arranque corregido, use un pod nuevo
+y compruebe las rutas efectivas antes de lanzar una cola larga.
 
 Puede usar el disco del pod durante su temporada y eliminar el pod al terminar,
 tras descargar sus resultados. No necesita contratar un Network Volume para este
 mecanismo. Mientras conserve discos contratados, se sigue cobrando almacenamiento.
 
-Verificación local sin red ni instalación de paquetes: `python -B test_runpod_extras.py`.
+Verificación local sin red ni instalación de paquetes:
+`python -B -m unittest test_runpod_start test_runpod_extras`.
+Las pruebas ejecutan el comando completo con Bash y curl reales contra un servidor
+HTTP local, con y sin `/workspace`, incluidos reinicios, HTTP 404, reintentos y
+hooks vacíos o inválidos. También ejecutan una copia del entrypoint del autor y
+su selección de almacenamiento con git simulado; las fuentes de esas copias están
+indicadas en `test_runpod_start.py`. No arrancan ComfyUI ni un pod real.
 
 Fuentes de la integración:
 

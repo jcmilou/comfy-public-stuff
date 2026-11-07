@@ -1,4 +1,6 @@
 runpod-minimax-extras.sh text eol=lf
+runpod-start.sh text eol=lf
+test_fixtures/*.sh text eol=lf
 runpod-node-snapshots.json text eol=lf
 # Preserve the official snapshot bytes used by SHA256 verification.
 custom_nodes/openrouter_node/** -text
